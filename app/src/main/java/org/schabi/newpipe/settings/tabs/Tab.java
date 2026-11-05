@@ -704,9 +704,9 @@ public abstract class Tab {
         }
 
         @Override
-        public SearchFragment getFragment(final Context context) {
+        public KioskFragment getFragment(final Context context) throws ExtractionException {
             final int serviceId = ServiceHelper.getSelectedServiceId(context);
-            return SearchFragment.getInstance(serviceId, "top music");
+            return KioskFragment.getInstance(serviceId, "trending_music");
         }
     }
 
