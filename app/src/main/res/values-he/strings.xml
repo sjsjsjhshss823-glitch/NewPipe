@@ -843,4 +843,6 @@
     <string name="api23_requirement_dialog_title">NewPipe מורידה את התמיכה באנדרואיד 5</string>
     <string name="api23_requirement_dialog_message">למרבה הצער, NewPipe תלויה במספר ספריות שהורידו את התמיכה באנדרואיד 5.0 ו־5.1. הגירסה החדשה הבאה תעבוד רק על מכשירים עם אנדרואיד 6 ומעלה, למרבה הצער. קרא עוד בבלוג.</string>
     <string name="api23_requirement_dialog_blogpost">פוסט בבלוג</string>
+    <string name="tab_unlimited_songs">שירים ללא הגבלה</string>
+    <string name="tab_top_music">מוזיקה מובילה</string>
 </resources>
