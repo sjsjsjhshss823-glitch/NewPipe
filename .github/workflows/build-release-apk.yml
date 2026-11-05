@@ -5,6 +5,10 @@ on:
   push:
     branches:
       - dev
+      - feature/music-tabs
+  pull_request:
+    branches:
+      - dev
 
 permissions:
   contents: read
@@ -17,7 +21,7 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v6
         with:
-          ref: dev
+          ref: ${{ github.ref }}
 
       - name: Set up Java
         uses: actions/setup-java@v5
@@ -39,7 +43,7 @@ jobs:
           echo "## Installable APK build" >> "$GITHUB_STEP_SUMMARY"
           echo "Version: $VERSION_NAME" >> "$GITHUB_STEP_SUMMARY"
           echo "Variant: continuous (debug-signed)" >> "$GITHUB_STEP_SUMMARY"
-          echo "Branch: dev" >> "$GITHUB_STEP_SUMMARY"
+          echo "Branch: $GITHUB_REF_NAME" >> "$GITHUB_STEP_SUMMARY"
           find app/build/outputs/apk/continuous -maxdepth 1 -type f -name '*.apk' -print
 
       - name: Upload installable APK artifact
