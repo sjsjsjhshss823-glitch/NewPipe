@@ -660,29 +660,53 @@ public abstract class Tab {
     }
     public static class MusicSearchTab extends Tab {
         public static final int ID = 10;
-        @Override public int getTabId() { return ID; }
-        @Override public String getTabName(final Context context) {
+
+        @Override
+        public int getTabId() {
+            return ID;
+        }
+
+        @Override
+        public String getTabName(final Context context) {
             return context.getString(R.string.tab_unlimited_songs);
         }
-        @DrawableRes @Override public int getTabIconRes(final Context context) {
+
+        @DrawableRes
+        @Override
+        public int getTabIconRes(final Context context) {
             return R.drawable.ic_music_note;
         }
-        @Override public SearchFragment getFragment(final Context context) {
-            return SearchFragment.getInstance(ServiceHelper.getSelectedServiceId(context), "music");
+
+        @Override
+        public SearchFragment getFragment(final Context context) {
+            final int serviceId = ServiceHelper.getSelectedServiceId(context);
+            return SearchFragment.getInstance(serviceId, "music");
         }
     }
 
     public static class TopMusicTab extends Tab {
         public static final int ID = 11;
-        @Override public int getTabId() { return ID; }
-        @Override public String getTabName(final Context context) {
+
+        @Override
+        public int getTabId() {
+            return ID;
+        }
+
+        @Override
+        public String getTabName(final Context context) {
             return context.getString(R.string.tab_top_music);
         }
-        @DrawableRes @Override public int getTabIconRes(final Context context) {
+
+        @DrawableRes
+        @Override
+        public int getTabIconRes(final Context context) {
             return R.drawable.ic_trending_up;
         }
-        @Override public SearchFragment getFragment(final Context context) {
-            return SearchFragment.getInstance(ServiceHelper.getSelectedServiceId(context), "top music");
+
+        @Override
+        public SearchFragment getFragment(final Context context) {
+            final int serviceId = ServiceHelper.getSelectedServiceId(context);
+            return SearchFragment.getInstance(serviceId, "top music");
         }
     }
 
