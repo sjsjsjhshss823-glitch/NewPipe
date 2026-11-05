@@ -31,6 +31,7 @@ import androidx.fragment.app.FragmentStatePagerAdapterMenuWorkaround;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
 import org.schabi.newpipe.BaseFragment;
@@ -116,6 +117,7 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
     @Override
     public void onResume() {
         super.onResume();
+        setToolbarCollapsible(true);
 
         final boolean newYoutubeRestrictedModeEnabled =
                 prefs.getBoolean(youtubeRestrictedModeEnabledKey, false);
@@ -128,6 +130,34 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
         if (mainTabsPositionBottom != newMainTabsPosition) {
             mainTabsPositionBottom = newMainTabsPosition;
             updateTabLayoutPosition();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        setToolbarCollapsible(false);
+        super.onPause();
+    }
+
+    private void setToolbarCollapsible(final boolean collapsible) {
+        if (activity == null) {
+            return;
+        }
+        final View toolbarLayout = activity.findViewById(R.id.toolbar_layout);
+        final View appBarView = activity.findViewById(R.id.appbar);
+        if (toolbarLayout == null || !(toolbarLayout.getLayoutParams()
+                instanceof AppBarLayout.LayoutParams)) {
+            return;
+        }
+        final AppBarLayout.LayoutParams params =
+                (AppBarLayout.LayoutParams) toolbarLayout.getLayoutParams();
+        params.setScrollFlags(collapsible
+                ? AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+                    | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+                : 0);
+        toolbarLayout.setLayoutParams(params);
+        if (!collapsible && appBarView instanceof AppBarLayout) {
+            ((AppBarLayout) appBarView).setExpanded(true, false);
         }
     }
 
