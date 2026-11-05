@@ -1,4 +1,4 @@
-name: Build unsigned release APK
+name: Build installable APK
 
 on:
   workflow_dispatch:
@@ -29,23 +29,25 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/actions/wrapper-validation@v6
 
-      - name: Build release APK
-        run: ./gradlew assembleRelease --stacktrace
+      - name: Build installable APK
+        run: ./gradlew --no-daemon --console=plain assembleContinuous --stacktrace --info
 
       - name: Record build metadata
         if: success()
         run: |
-          VERSION_NAME="$(jq -r '.elements[0].versionName' app/build/outputs/apk/release/output-metadata.json)"
-          echo "## APK build" >> "$GITHUB_STEP_SUMMARY"
+          VERSION_NAME="$(jq -r '.elements[0].versionName' app/build/outputs/apk/continuous/output-metadata.json)"
+          echo "## Installable APK build" >> "$GITHUB_STEP_SUMMARY"
           echo "Version: $VERSION_NAME" >> "$GITHUB_STEP_SUMMARY"
+          echo "Variant: continuous (debug-signed)" >> "$GITHUB_STEP_SUMMARY"
           echo "Branch: dev" >> "$GITHUB_STEP_SUMMARY"
+          find app/build/outputs/apk/continuous -maxdepth 1 -type f -name '*.apk' -print
 
-      - name: Upload APK artifact
+      - name: Upload installable APK artifact
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          name: NewPipe-release-APK
-          path: app/build/outputs/apk/release/*.apk
+          name: NewPipe-installable-APK
+          path: app/build/outputs/apk/continuous/*.apk
           if-no-files-found: error
           retention-days: 14
 
@@ -59,5 +61,3 @@ jobs:
             app/build/outputs/logs/**
           if-no-files-found: ignore
           retention-days: 7
-
-# Trigger a fresh release build after workflow setup.
