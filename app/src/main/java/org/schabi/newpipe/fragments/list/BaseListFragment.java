@@ -263,6 +263,12 @@ public abstract class BaseListFragment<I, N> extends BaseStateFragment<I>
             public void held(final StreamInfoItem selectedItem) {
                 showInfoItemDialog(selectedItem);
             }
+
+            @Override
+            public void downloaded(final StreamInfoItem selectedItem) {
+                org.schabi.newpipe.info_list.dialog.StreamDialogDefaultEntry.DOWNLOAD
+                        .action.onClick(BaseListFragment.this, selectedItem);
+            }
         });
 
         infoListAdapter.setOnChannelSelectedListener(selectedItem -> {
