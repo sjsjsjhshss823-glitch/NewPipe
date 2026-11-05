@@ -23,6 +23,7 @@ import org.schabi.newpipe.fragments.list.channel.ChannelFragment;
 import org.schabi.newpipe.fragments.list.kiosk.DefaultKioskFragment;
 import org.schabi.newpipe.fragments.list.kiosk.KioskFragment;
 import org.schabi.newpipe.fragments.list.playlist.PlaylistFragment;
+import org.schabi.newpipe.fragments.list.search.SearchFragment;
 import org.schabi.newpipe.local.bookmark.BookmarkFragment;
 import org.schabi.newpipe.local.feed.FeedFragment;
 import org.schabi.newpipe.local.history.StatisticsPlaylistFragment;
@@ -165,7 +166,9 @@ public abstract class Tab {
         KIOSK(new KioskTab()),
         CHANNEL(new ChannelTab()),
         PLAYLIST(new PlaylistTab()),
-        FEEDGROUP(new FeedGroupTab());
+        FEEDGROUP(new FeedGroupTab()),
+        MUSIC_SEARCH(new MusicSearchTab()),
+        TOP_MUSIC(new TopMusicTab());
 
         private final Tab tab;
 
@@ -655,6 +658,34 @@ public abstract class Tab {
             return playlistType;
         }
     }
+    public static class MusicSearchTab extends Tab {
+        public static final int ID = 10;
+        @Override public int getTabId() { return ID; }
+        @Override public String getTabName(final Context context) {
+            return context.getString(R.string.tab_unlimited_songs);
+        }
+        @DrawableRes @Override public int getTabIconRes(final Context context) {
+            return R.drawable.ic_music_note;
+        }
+        @Override public SearchFragment getFragment(final Context context) {
+            return SearchFragment.getInstance(ServiceHelper.getSelectedServiceId(context), "music");
+        }
+    }
+
+    public static class TopMusicTab extends Tab {
+        public static final int ID = 11;
+        @Override public int getTabId() { return ID; }
+        @Override public String getTabName(final Context context) {
+            return context.getString(R.string.tab_top_music);
+        }
+        @DrawableRes @Override public int getTabIconRes(final Context context) {
+            return R.drawable.ic_trending_up;
+        }
+        @Override public SearchFragment getFragment(final Context context) {
+            return SearchFragment.getInstance(ServiceHelper.getSelectedServiceId(context), "top music");
+        }
+    }
+
     public static class FeedGroupTab extends Tab {
         public static final int ID = 9;
         private static final String JSON_FEED_GROUP_ID_KEY = "feed_group_id";
