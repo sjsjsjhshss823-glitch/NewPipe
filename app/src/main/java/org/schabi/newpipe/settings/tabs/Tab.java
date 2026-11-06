@@ -16,6 +16,7 @@ import org.schabi.newpipe.error.ErrorInfo;
 import org.schabi.newpipe.error.ErrorUtil;
 import org.schabi.newpipe.error.UserAction;
 import org.schabi.newpipe.extractor.NewPipe;
+import org.schabi.newpipe.extractor.ServiceList;
 import org.schabi.newpipe.extractor.StreamingService;
 import org.schabi.newpipe.extractor.exceptions.ExtractionException;
 import org.schabi.newpipe.fragments.BlankFragment;
@@ -680,7 +681,15 @@ public abstract class Tab {
         @Override
         public SearchFragment getFragment(final Context context) {
             final int serviceId = ServiceHelper.getSelectedServiceId(context);
-            return SearchFragment.getInstance(serviceId, "music");
+            // Search for Hebrew-language hits and exclude common live/set/mix results.
+            final String query = "להיטים ישראלים שירים בעברית -live -לייב -שידור חי "
+                    + "-סטים -מיקס -mix -set -playlist -פלייליסט";
+            if (serviceId == ServiceList.YouTube.getServiceId()) {
+                // Restrict YouTube results to videos, not playlists or channels.
+                return SearchFragment.getInstance(serviceId, query,
+                        new String[]{"videos"}, "");
+            }
+            return SearchFragment.getInstance(serviceId, query);
         }
     }
 
