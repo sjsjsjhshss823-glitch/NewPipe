@@ -2,6 +2,7 @@ package org.schabi.newpipe.info_list.holder;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ public class StreamMiniInfoItemHolder extends InfoItemHolder {
     public final TextView itemUploaderView;
     public final TextView itemDurationView;
     private final AnimatedProgressBar itemProgressView;
+    private final ImageButton itemDownloadButton;
 
     StreamMiniInfoItemHolder(final InfoItemBuilder infoItemBuilder, final int layoutId,
                              final ViewGroup parent) {
@@ -38,6 +40,7 @@ public class StreamMiniInfoItemHolder extends InfoItemHolder {
         itemUploaderView = itemView.findViewById(R.id.itemUploaderView);
         itemDurationView = itemView.findViewById(R.id.itemDurationView);
         itemProgressView = itemView.findViewById(R.id.itemProgressView);
+        itemDownloadButton = itemView.findViewById(R.id.itemDownloadButton);
     }
 
     public StreamMiniInfoItemHolder(final InfoItemBuilder infoItemBuilder, final ViewGroup parent) {
@@ -94,6 +97,14 @@ public class StreamMiniInfoItemHolder extends InfoItemHolder {
                 itemBuilder.getOnStreamSelectedListener().selected(item);
             }
         });
+
+        if (itemDownloadButton != null) {
+            itemDownloadButton.setOnClickListener(view -> {
+                if (itemBuilder.getOnStreamSelectedListener() != null) {
+                    itemBuilder.getOnStreamSelectedListener().downloaded(item);
+                }
+            });
+        }
 
         switch (item.getStreamType()) {
             case AUDIO_STREAM:

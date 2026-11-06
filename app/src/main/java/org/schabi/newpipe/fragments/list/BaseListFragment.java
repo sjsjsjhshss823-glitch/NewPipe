@@ -28,6 +28,7 @@ import org.schabi.newpipe.fragments.OnScrollBelowItemsListener;
 import org.schabi.newpipe.info_list.InfoListAdapter;
 import org.schabi.newpipe.info_list.ItemViewMode;
 import org.schabi.newpipe.info_list.dialog.InfoItemDialog;
+import org.schabi.newpipe.info_list.dialog.StreamDialogDefaultEntry;
 import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.OnClickGesture;
 import org.schabi.newpipe.util.StateSaver;
@@ -262,6 +263,12 @@ public abstract class BaseListFragment<I, N> extends BaseStateFragment<I>
             @Override
             public void held(final StreamInfoItem selectedItem) {
                 showInfoItemDialog(selectedItem);
+            }
+
+            @Override
+            public void downloaded(final StreamInfoItem selectedItem) {
+                StreamDialogDefaultEntry.DOWNLOAD.action
+                        .onClick(BaseListFragment.this, selectedItem);
             }
         });
 

@@ -16,6 +16,7 @@ import org.schabi.newpipe.error.ErrorInfo;
 import org.schabi.newpipe.error.ErrorUtil;
 import org.schabi.newpipe.error.UserAction;
 import org.schabi.newpipe.extractor.NewPipe;
+import org.schabi.newpipe.extractor.ServiceList;
 import org.schabi.newpipe.extractor.StreamingService;
 import org.schabi.newpipe.extractor.exceptions.ExtractionException;
 import org.schabi.newpipe.fragments.BlankFragment;
@@ -23,6 +24,7 @@ import org.schabi.newpipe.fragments.list.channel.ChannelFragment;
 import org.schabi.newpipe.fragments.list.kiosk.DefaultKioskFragment;
 import org.schabi.newpipe.fragments.list.kiosk.KioskFragment;
 import org.schabi.newpipe.fragments.list.playlist.PlaylistFragment;
+import org.schabi.newpipe.fragments.list.search.SearchFragment;
 import org.schabi.newpipe.local.bookmark.BookmarkFragment;
 import org.schabi.newpipe.local.feed.FeedFragment;
 import org.schabi.newpipe.local.history.StatisticsPlaylistFragment;
@@ -165,7 +167,9 @@ public abstract class Tab {
         KIOSK(new KioskTab()),
         CHANNEL(new ChannelTab()),
         PLAYLIST(new PlaylistTab()),
-        FEEDGROUP(new FeedGroupTab());
+        FEEDGROUP(new FeedGroupTab()),
+        MUSIC_SEARCH(new MusicSearchTab()),
+        TOP_MUSIC(new TopMusicTab());
 
         private final Tab tab;
 
@@ -655,6 +659,66 @@ public abstract class Tab {
             return playlistType;
         }
     }
+    public static class MusicSearchTab extends Tab {
+        public static final int ID = 10;
+
+        @Override
+        public int getTabId() {
+            return ID;
+        }
+
+        @Override
+        public String getTabName(final Context context) {
+            return context.getString(R.string.tab_unlimited_songs);
+        }
+
+        @DrawableRes
+        @Override
+        public int getTabIconRes(final Context context) {
+            return R.drawable.ic_music_note;
+        }
+
+        @Override
+        public SearchFragment getFragment(final Context context) {
+            final int serviceId = ServiceHelper.getSelectedServiceId(context);
+            // Search for Hebrew-language hits and exclude common live/set/mix results.
+            final String query = "להיטים ישראלים שירים בעברית -live -לייב -שידור חי "
+                    + "-סטים -מיקס -mix -set -playlist -פלייליסט";
+            if (serviceId == ServiceList.YouTube.getServiceId()) {
+                // Restrict YouTube results to videos, not playlists or channels.
+                return SearchFragment.getInstance(serviceId, query,
+                        new String[]{"videos"}, "");
+            }
+            return SearchFragment.getInstance(serviceId, query);
+        }
+    }
+
+    public static class TopMusicTab extends Tab {
+        public static final int ID = 11;
+
+        @Override
+        public int getTabId() {
+            return ID;
+        }
+
+        @Override
+        public String getTabName(final Context context) {
+            return context.getString(R.string.tab_top_music);
+        }
+
+        @DrawableRes
+        @Override
+        public int getTabIconRes(final Context context) {
+            return R.drawable.ic_trending_up;
+        }
+
+        @Override
+        public KioskFragment getFragment(final Context context) throws ExtractionException {
+            final int serviceId = ServiceHelper.getSelectedServiceId(context);
+            return KioskFragment.getInstance(serviceId, "trending_music");
+        }
+    }
+
     public static class FeedGroupTab extends Tab {
         public static final int ID = 9;
         private static final String JSON_FEED_GROUP_ID_KEY = "feed_group_id";

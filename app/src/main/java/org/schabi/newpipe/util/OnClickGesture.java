@@ -9,6 +9,10 @@ public interface OnClickGesture<T> {
         // Optional gesture
     }
 
+    default void downloaded(final T selectedItem) {
+        // Optional download action
+    }
+
     default void drag(final T selectedItem, final RecyclerView.ViewHolder viewHolder) {
         // Optional gesture
     }
