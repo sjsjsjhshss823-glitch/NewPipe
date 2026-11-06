@@ -185,8 +185,15 @@ public class SearchFragment extends BaseListFragment<SearchInfo, ListExtractor.I
     private TextWatcher textWatcher;
 
     public static SearchFragment getInstance(final int serviceId, final String searchString) {
+        return getInstance(serviceId, searchString, new String[0], "");
+    }
+
+    public static SearchFragment getInstance(final int serviceId,
+                                             final String searchString,
+                                             final String[] contentFilter,
+                                             final String sortFilter) {
         final SearchFragment searchFragment = new SearchFragment();
-        searchFragment.setQuery(serviceId, searchString, new String[0], "");
+        searchFragment.setQuery(serviceId, searchString, contentFilter, sortFilter);
 
         if (!TextUtils.isEmpty(searchString)) {
             searchFragment.setSearchOnResume();
